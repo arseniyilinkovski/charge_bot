@@ -43,7 +43,7 @@ async def get_list(message: Message):
             text += f"{str(position.id)}. {str(position.first_name)}\n"
         else:
 
-            text += f"{str(position.id)}. <a href='https://t.me/{position.username}'>{str(position.first_name)}</a>\n"
+            text += f"{str(position.id)}. {str(position.first_name)} @{position.username}\n"
     try:
 
         await message.answer(text, parse_mode="HTML")

@@ -11,8 +11,8 @@ from routers import router
 
 
 async def main():
-    await delete_tables()
-    print("База очищена")
+    #await delete_tables()
+    #print("База очищена")
     await async_main()
     print("База создана")
     bot = Bot(token=TOKEN)
