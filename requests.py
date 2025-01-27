@@ -26,9 +26,54 @@ async def get_positions():
         return await session.scalars(select(Positions))
 
 
-async def clear_table():
+async def delete_user(tg_id):
     async with async_session() as session:
-        await session.delete()
+        user = await session.scalar(select(Positions).where(Positions.tg_id == tg_id))
+        if user:
+            await session.delete(user)
+            await session.commit()
+        if not user:
+            return 0
+
+
+async def check_role(tg_id, role_name: str):
+    async with async_session() as session:
+        user = await session.scalar(select(Positions).where(Positions.tg_id == tg_id))
+        if user.role != role_name:
+            return False
+        else:
+            return True
+
+
+async def set_role(tg_id, role_name: str):
+    async with async_session() as session:
+        user = await session.scalar(select(Positions).where(Positions.tg_id == tg_id))
+        user.role = role_name
         await session.commit()
 
 
+async def get_user(position):
+    async with async_session() as session:
+        user = await session.scalar(select(Positions).where(Positions.id == position))
+        if user:
+            return user
+        if not user:
+            return False
+
+
+async def delete_user_by_position(position):
+    async with async_session() as session:
+        user = await get_user(position)
+        if user:
+            await session.delete(user)
+            await session.commit()
+        else:
+            return False
+
+
+async def clear_charge():
+    async with async_session() as session:
+        all_positions = await session.scalars(select(Positions))
+        for position in all_positions:
+            await session.delete(position)
+        await session.commit()

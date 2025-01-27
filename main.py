@@ -2,12 +2,12 @@ import asyncio
 import logging
 import sys
 
-import aiogram
 from aiogram import Bot, Dispatcher
-from db import async_main, delete_tables
+from db import async_main
 from config import TOKEN
-from requests import clear_table
-from routers import router
+
+from routers.routers import router
+from routers.admin_router import admin_router
 
 
 async def main():
@@ -18,6 +18,7 @@ async def main():
     bot = Bot(token=TOKEN)
     dp = Dispatcher()
     dp.include_router(router)
+    dp.include_router(admin_router)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
